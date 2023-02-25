@@ -1,10 +1,11 @@
+import requests
+from bs4 import BeautifulSoup
+from enum import Enum
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 
-from enum import Enum
-
-from bs4 import BeautifulSoup
-import requests
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 
 class Browser_Type(Enum):
@@ -71,9 +72,11 @@ class Browser:
         data = {}
         req = requests.get(url)
         page = req.text
-        soup = BeautifulSoup(page,'lxml')
-        item_title = soup.find('h1', class_='item-title__primary ').get_text().strip()
-        item_price = soup.find('span', class_='price-tag-fraction').get_text().strip().replace('.', '')
+        soup = BeautifulSoup(page, 'lxml')
+        item_title = soup.find(
+            'h1', class_='item-title__primary ').get_text().strip()
+        item_price = soup.find(
+            'span', class_='price-tag-fraction').get_text().strip().replace('.', '')
         data['item_title'] = item_title
         data['item_price'] = item_price
         return data
